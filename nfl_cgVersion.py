@@ -66,6 +66,24 @@ study.optimize(objective, n_trials=100)
 
 study.best_params
 
+def getBestValue(int):
+  X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size=(int/100),random_state=123)
+  study = optuna.create_study(direction='minimize')
+  study.optimize(objective, n_trials=10)
+  return study.best_value
+
+results=[]
+input=[]
+for number in range(1,100):
+  results.append(getBestValue(number))
+  input.append(number)
+
+plt.plot(input,results)
+plt.title('Fantasy Football Predictions')
+plt.xlabel('Percent of Data Trained')
+plt.ylabel('Error Rate Percentage')
+plt.show()
+
 alg = xgb.XGBRegressor(colsample_bytree=.7,learning_rate=.07,max_depth=2,min_child_weight=15,n_estimators=72,subsample=.9)
 algs = alg.fit(X_train,Y_train)
 y_pred = algs.predict(X_test)
